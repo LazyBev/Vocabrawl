@@ -9,8 +9,8 @@ main :: proc() {
     rl.InitWindow(screen_width, screen_height, "YOMI Hustle Style Fighter")
     defer rl.CloseWindow()
     
-    // Load custom font
-    font_bold   := rl.LoadFont("assets/fonts/BeaufortforLOL-Bold.ttf")
+    // Load custom fonts
+    font_bold := rl.LoadFont("assets/fonts/BeaufortforLOL-Bold.ttf")
     font_regular := rl.LoadFont("assets/fonts/BeaufortforLOL-Regular.ttf")
     defer {
         rl.UnloadFont(font_bold)
@@ -18,7 +18,10 @@ main :: proc() {
     }
     
     game := init_game()
-    defer rl.UnloadTexture(game.background)
+    defer {
+        rl.UnloadTexture(game.background)
+        cleanup_game(&game)
+    }
     
     rl.SetExitKey(.Q)
     rl.SetTargetFPS(60)
