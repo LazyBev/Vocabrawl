@@ -7,7 +7,10 @@ draw_game :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
     defer rl.EndDrawing()
     
     rl.ClearBackground(rl.BLACK)
-    
+
+    // Draw dark overlay background
+    rl.DrawRectangle(0, 0, 1000, 800, rl.Color{0, 0, 0, 120})
+
     // Draw background
     rl.DrawTexture(game.background, 0, 0, rl.WHITE)
     
@@ -33,8 +36,10 @@ draw_menu :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
     rl.DrawRectangle(0, 0, 1000, 800, rl.Color{0, 0, 0, 120})
     
     // Draw lighter circle in center for the menu area
-    // TODO
-    
+    circle_radius := f32(300)
+    rl.DrawCircle(i32(center_x), i32(center_y), circle_radius, rl.Color{100, 149, 237, 50})
+    rl.DrawCircleLines(i32(center_x), i32(center_y), circle_radius, rl.Color{255, 255, 255, 100})
+
     // Title - stylized like the reference
     title := cstring("Vocabrawl")
     title_size := f32(72)
@@ -60,8 +65,8 @@ draw_menu :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
         
         // Draw selection indicator (simple line above selected item)
         if is_selected {
-            rl.DrawLine(i32(text_x - 30), i32(y - 5), i32(text_x - 10), i32(y - 5), rl.GOLD)
-            rl.DrawLine(i32(text_x + text_width + 10), i32(y - 5), i32(text_x + text_width + 30), i32(y - 5), rl.GOLD)
+            rl.DrawLine(i32(text_x - 30), i32(y + text_size - 15), i32(text_x - 10), i32(y + text_size - 15), rl.GOLD)
+            rl.DrawLine(i32(text_x + text_width + 10), i32(y + text_size - 15), i32(text_x + text_width + 30), i32(y + text_size - 15), rl.GOLD)
         }
         
         rl.DrawTextEx(font_regular, menu_items[i], {text_x, y}, text_size, 1.0, text_color)
@@ -69,9 +74,9 @@ draw_menu :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
     
     // Version and social info at bottom
     version_text := cstring("version 1.0.0")
-    version_size := f32(12)
+    version_size := f32(30)
     version_width := rl.MeasureTextEx(font_regular, version_text, version_size, 1.0).x
-    rl.DrawTextEx(font_regular, version_text, {20, screen_height - 30}, version_size, 1.0, rl.Color{100, 100, 100, 255})
+    rl.DrawTextEx(font_regular, version_text, {20, screen_height - 30}, version_size, 1.0, rl.Color{255, 255, 255, 255})
 }
 
 draw_options :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
@@ -117,16 +122,14 @@ draw_options :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
         rl.DrawTextEx(font_regular, percent_text, {bar_x + bar_width + 20.0, bar_y - 3}, 16.0, 1.0, rl.WHITE)
     }
     
-    // Instructions
-    instr_size := f32(12)
-    instr := cstring("Use W/S to navigate | A/D to adjust | ESC to go back")
-    instr_width := rl.MeasureTextEx(font_regular, instr, instr_size, 1.0).x
-    rl.DrawTextEx(font_regular, instr, {center_x - instr_width / 2.0, screen_height - 40}, instr_size, 1.0, rl.Color{150, 150, 150, 255})
 }
 
 draw_ingame :: proc(game: ^Game, font: rl.Font) {
     screen_width :: f32(1000)
     screen_height :: f32(800)
+
+    // Draw dark overlay background
+    rl.DrawRectangle(0, 0, 1000, 800, rl.Color{0, 0, 0, 120})
     
     // HUD at top with dark background
     rl.DrawRectangle(0, 0, 1000, 80, rl.Color{0, 0, 0, 150})
