@@ -7,7 +7,7 @@ main :: proc() {
     screen_width :: 1000
     screen_height :: 800
     
-    rl.InitWindow(screen_width, screen_height, "YOMI Hustle Style Fighter")
+    rl.InitWindow(screen_width, screen_height, "Vocabrawl")
     defer rl.CloseWindow()
     
     // Load custom fonts
@@ -21,7 +21,7 @@ main :: proc() {
     game := vb.init_game()
     defer {
         rl.UnloadTexture(game.background)
-        cleanup_game(&game)
+        vb.cleanup_game(&game)
     }
     
     rl.SetExitKey(.Q)

@@ -1,4 +1,4 @@
-package main
+package vocabrawl
 
 import rl "vendor:raylib"
 
@@ -20,7 +20,7 @@ Game :: struct {
 
 init_game :: proc() -> Game {
     // Load background image
-    background := rl.LoadTexture("assets/backgrounds/Vocaloids.jpg")
+    background := rl.LoadTexture("assets/Backgrounds/Vocaloids.jpg")
     
     return Game{
         state = .MENU,

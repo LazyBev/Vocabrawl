@@ -1,4 +1,4 @@
-package main
+package vocabrawl
 
 import "core:math"
 import rl "vendor:raylib"
@@ -19,7 +19,7 @@ update_game :: proc(game: ^Game, dt: f32) {
 }
 
 update_menu :: proc(game: ^Game) {
-    menu_len := 3
+    menu_len := 5
     
     // Keyboard navigation
     if rl.IsKeyPressed(.S) || rl.IsKeyPressed(.DOWN) {
@@ -61,9 +61,16 @@ handle_menu_selection :: proc(game: ^Game, index: int) {
         case 0:
             game.state = .PLAYING
         case 1:
+            // How to Play
+            game.state = .PLAYING
+        case 2:
+            // Customise
             game.state = .OPTIONS
             game.selected_index = 0
-        case 2:
+        case 3:
+            // Leaderboard
+            game.state = .PLAYING
+        case 4:
             rl.CloseWindow()
     }
 }
