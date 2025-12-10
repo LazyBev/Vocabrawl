@@ -6,6 +6,8 @@ import rl "vendor:raylib"
 update_game :: proc(game: ^Game, dt: f32) {
     if game.state == .MENU {
         update_menu(game)
+    } else if game.state == .HOW_TO_PLAY {
+        update_howto(game)
     } else if game.state == .OPTIONS {
         update_options(game)
     } else if game.state == .PLAYING {
@@ -62,7 +64,7 @@ handle_menu_selection :: proc(game: ^Game, index: int) {
             game.state = .PLAYING
         case 1:
             // How to Play
-            game.state = .PLAYING
+            game.state = .HOW_TO_PLAY
         case 2:
             // Customise
             game.state = .OPTIONS
@@ -143,6 +145,13 @@ update_ingame :: proc(game: ^Game, dt: f32) {
     // Add gameplay logic here
 }
 
+update_howto :: proc(game: ^Game) {
+    if rl.IsKeyPressed(.ENTER) || rl.IsKeyPressed(.ESCAPE) || rl.IsKeyPressed(.SPACE) {
+        game.state = .MENU
+        game.selected_index = 0
+    }
+}
+
 update_game_over :: proc(game: ^Game) {
     // Game over logic
     if rl.IsKeyPressed(.ESCAPE) {
@@ -158,9 +167,11 @@ update_debug_keys :: proc(game: ^Game) {
     } else if rl.IsKeyPressed(.TWO) {
         game.state = .PLAYING
     } else if rl.IsKeyPressed(.THREE) {
+        game.state = .HOW_TO_PLAY
+    } else if rl.IsKeyPressed(.FOUR) {
         game.state = .OPTIONS
         game.selected_index = 0
-    } else if rl.IsKeyPressed(.FOUR) {
+    } else if rl.IsKeyPressed(.FIVE) {
         game.state = .GAME_OVER
     }
 }

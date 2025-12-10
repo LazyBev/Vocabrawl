@@ -21,6 +21,8 @@ draw_game :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
             draw_ingame(game, font_regular)
         case .OPTIONS:
             draw_options(game, font_bold, font_regular)
+        case .HOW_TO_PLAY:
+            draw_how_to(game, font_bold, font_regular)
         case .GAME_OVER:
             draw_game_over(game, font_bold)
     }
@@ -77,6 +79,69 @@ draw_menu :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
     version_size := f32(30)
     version_width := rl.MeasureTextEx(font_regular, version_text, version_size, 1.0).x
     rl.DrawTextEx(font_regular, version_text, {20, screen_height - 30}, version_size, 1.0, rl.Color{255, 255, 255, 255})
+}
+
+draw_how_to :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {
+    screen_width :: f32(1000)
+    screen_height :: f32(800)
+    center_x := screen_width / 2.0
+    center_y := screen_height / 2.0
+    
+    // Dark overlay
+    rl.DrawRectangle(0, 0, 1000, 800, rl.Color{0, 0, 0, 150})
+    rl.DrawRectangle(100, 80, 800, 640, rl.Color{0, 0, 0, 200})
+    rl.DrawRectangleLines(100, 80, 800, 640, rl.Color{255, 215, 0, 150})
+    
+    // Title
+    title := cstring("HOW TO PLAY")
+    title_size := f32(56)
+    title_width := rl.MeasureTextEx(font_bold, title, title_size, 1.0).x
+    rl.DrawTextEx(font_bold, title, {center_x - title_width / 2.0, 110}, title_size, 1.0, rl.GOLD)
+    
+    // Instructions content
+    instructions := [?]cstring{
+        "OBJECTIVE:",
+        "Test your vocabulary skills in fast-paced word battles!",
+        "",
+        "CONTROLS:",
+        "W/UP ARROW - Move Up",
+        "S/DOWN ARROW - Move Down",
+        "A/LEFT ARROW - Move Left",
+        "D/RIGHT ARROW - Move Right",
+        "ENTER/SPACE - Select/Confirm",
+        "ESC - Pause/Back",
+    }
+    
+    text_y := f32(200)
+    line_height := f32(32)
+    
+    for i in 0..<len(instructions) {
+        text := instructions[i]
+        text_size := f32(20)
+        
+        // Check if it's a header (ends with colon)
+        text_str := string(text)
+        is_header := len(text_str) > 0 && text_str[len(text_str)-1] == ':'
+        
+        if is_header {
+            text_size = 24
+            rl.DrawTextEx(font_bold, text, {150, text_y}, text_size, 1.0, rl.GOLD)
+        } else if len(text) == 0 {
+            // Empty line, just add spacing
+            text_y += line_height * 0.5
+            continue
+        } else {
+            rl.DrawTextEx(font_regular, text, {170, text_y}, text_size, 1.0, rl.WHITE)
+        }
+        
+        text_y += line_height
+    }
+    
+    // Back instruction
+    back_text := cstring("Press ESC or ENTER to return to menu")
+    back_size := f32(20)
+    back_width := rl.MeasureTextEx(font_regular, back_text, back_size, 1.0).x
+    rl.DrawTextEx(font_regular, back_text, {center_x - back_width / 2.0, screen_height - 60}, back_size, 1.0, rl.GOLD)
 }
 
 draw_options :: proc(game: ^Game, font_bold: rl.Font, font_regular: rl.Font) {

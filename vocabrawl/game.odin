@@ -6,6 +6,7 @@ GameState :: enum {
     MENU,
     PLAYING,
     OPTIONS,
+    HOW_TO_PLAY,
     GAME_OVER,
 }
 
