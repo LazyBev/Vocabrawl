@@ -1,7 +1,6 @@
 package main
 
 import rl "vendor:raylib"
-import vb "vocabrawl"
 
 main :: proc() {
     screen_width :: 1000
