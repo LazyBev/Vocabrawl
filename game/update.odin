@@ -8,8 +8,10 @@ update_game :: proc(game: ^Game, dt: f32) {
         update_menu(game)
     } else if game.state == .OPTIONS {
         update_options(game)
-    } else {
-        update_ingame(game)
+    } else if game.state == .PLAYING {
+        update_ingame(game, dt)
+    } else if game.state == .GAME_OVER {
+        update_game_over(game)
     }
     
     // Debug keys (can be removed in production)
@@ -27,8 +29,10 @@ update_menu :: proc(game: ^Game) {
     }
     
     // Mouse navigation and selection
-    center_x := f32(1000) / 2.0
-    center_y := f32(800) / 2.0
+    screen_width :: f32(1000)
+    screen_height :: f32(800)
+    center_x := screen_width / 2.0
+    center_y := screen_height / 2.0
     
     // Handle mouse hover and click on menu items
     for i in 0..<menu_len {
@@ -54,9 +58,13 @@ update_menu :: proc(game: ^Game) {
 
 handle_menu_selection :: proc(game: ^Game, index: int) {
     switch index {
-        case 0: game.state = .PLAYING
-        case 1: game.state = .OPTIONS
-        case 2: rl.CloseWindow()
+        case 0:
+            game.state = .PLAYING
+        case 1:
+            game.state = .OPTIONS
+            game.selected_index = 0
+        case 2:
+            rl.CloseWindow()
     }
 }
 
@@ -78,8 +86,10 @@ update_options :: proc(game: ^Game) {
     }
     
     // Mouse navigation and adjustment
-    center_x := f32(1000) / 2.0
-    center_y := f32(800) / 2.0
+    screen_width :: f32(1000)
+    screen_height :: f32(800)
+    center_x := screen_width / 2.0
+    center_y := screen_height / 2.0
     
     for i in 0..<option_len {
         y := center_y + f32(i * 60) + 20.0
@@ -89,9 +99,10 @@ update_options :: proc(game: ^Game) {
             game.selected_index = i
             
             // Volume adjustment with mouse scroll
-            if rl.GetMouseWheelMove() > 0 {
+            scroll := rl.GetMouseWheelMove()
+            if scroll > 0 {
                 adjust_volume(game, i, 0.05)
-            } else if rl.GetMouseWheelMove() < 0 {
+            } else if scroll < 0 {
                 adjust_volume(game, i, -0.05)
             }
         }
@@ -106,14 +117,27 @@ update_options :: proc(game: ^Game) {
 
 adjust_volume :: proc(game: ^Game, index: int, delta: f32) {
     switch index {
-        case 0: game.master_volume = math.clamp(game.master_volume + delta, 0.0, 1.0)
-        case 1: game.music_volume = math.clamp(game.music_volume + delta, 0.0, 1.0)
-        case 2: game.sfx_volume = math.clamp(game.sfx_volume + delta, 0.0, 1.0)
+        case 0:
+            game.master_volume = math.clamp(game.master_volume + delta, 0.0, 1.0)
+        case 1:
+            game.music_volume = math.clamp(game.music_volume + delta, 0.0, 1.0)
+        case 2:
+            game.sfx_volume = math.clamp(game.sfx_volume + delta, 0.0, 1.0)
     }
 }
 
-update_ingame :: proc(game: ^Game) {
-    // In-game controls
+update_ingame :: proc(game: ^Game, dt: f32) {
+    // In-game controls and logic
+    if rl.IsKeyPressed(.ESCAPE) {
+        game.state = .MENU
+        game.selected_index = 0
+    }
+    
+    // Add gameplay logic here
+}
+
+update_game_over :: proc(game: ^Game) {
+    // Game over logic
     if rl.IsKeyPressed(.ESCAPE) {
         game.state = .MENU
         game.selected_index = 0
