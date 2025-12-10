@@ -20,7 +20,7 @@ Game :: struct {
 
 init_game :: proc() -> Game {
     // Load background image
-    background := rl.LoadTexture("assets/Backgrounds/Vocaloids.jpg")
+    background := rl.LoadTexture("assets/backgrounds/Vocaloids.jpg")
     
     return Game{
         state = .MENU,
@@ -30,4 +30,8 @@ init_game :: proc() -> Game {
         music_volume = 0.7,
         sfx_volume = 0.8,
     }
+}
+
+cleanup_game :: proc(game: ^Game) {
+    
 }
