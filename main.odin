@@ -1,6 +1,7 @@
 package main
 
 import rl "vendor:raylib"
+import vb "vocabrawl"
 
 main :: proc() {
     screen_width :: 1000
@@ -17,7 +18,7 @@ main :: proc() {
         rl.UnloadFont(font_regular)
     }
     
-    game := init_game()
+    game := vb.init_game()
     defer {
         rl.UnloadTexture(game.background)
         cleanup_game(&game)
@@ -28,7 +29,7 @@ main :: proc() {
     
     for !rl.WindowShouldClose() {
         dt := rl.GetFrameTime()
-        update_game(&game, dt)
-        draw_game(&game, font_bold, font_regular)
+        vb.update_game(&game, dt)
+        vb.draw_game(&game, font_bold, font_regular)
     }
 }
